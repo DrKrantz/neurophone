@@ -13,6 +13,7 @@ class Sforzando(pm.Output):
     NAME = 'sforzando'
 
     def __init__(self):
+        pm.init()
         self.__noteRange = list(range(1, 127))
         id = self.__getDeviceId(self.NAME)
         if id == -1:

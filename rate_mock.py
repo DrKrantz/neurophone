@@ -1,4 +1,6 @@
 import numpy as np
+import time
+from outputDevices import Sforzando
 
 
 def generate_rates(n_channels=20, n_steps=1000, offset=10, scale=0.1, lambda_min=0, lambda_max=None):
@@ -16,16 +18,27 @@ def rates_to_velocities(rates, lambda_max, vel_min=0, vel_max=127):
 
 
 if __name__ == '__main__':
-    min_note = 35
-    max_note = 120
-    n = max_note-min_note
+    min_note = 80
+    max_note = 81
+    notes = list(range(min_note, max_note+1))
+    n = max_note-min_note+1
 
     lambda_min = 0
     lambda_max = 30
-    Ts = 2
-    h = 0.1  # resolution, in ms
+    Ts = 5
+    h = 500  # resolution, in ms
     lambda_base = 10  # Hz
     sigma = 0.1
-    rates = generate_rates(n, 1000 * int(Ts / h), lambda_base, sigma, lambda_min=lambda_min, lambda_max=lambda_max)
+    rates = generate_rates(n, int(1000 * Ts / h), lambda_base, sigma, lambda_min=lambda_min, lambda_max=lambda_max)
 
     velocities = rates_to_velocities(rates, lambda_max)
+
+    output = Sforzando()
+
+    for vels in velocities.T:
+        for k, note_vel in enumerate(vels):
+            output.note_off(notes[k], note_vel)
+            output.note_on(notes[k], note_vel)
+        time.sleep(h/1000)
+
+    [output.note_off(k, 0) for k in notes]
