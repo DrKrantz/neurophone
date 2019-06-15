@@ -33,12 +33,3 @@ if __name__ == '__main__':
 
     velocities = rates_to_velocities(rates, lambda_max)
 
-    output = Sforzando()
-
-    for vels in velocities.T:
-        for k, note_vel in enumerate(vels):
-            output.note_off(notes[k], note_vel)
-            output.note_on(notes[k], note_vel)
-        time.sleep(h/1000)
-
-    [output.note_off(k, 0) for k in notes]

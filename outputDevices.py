@@ -29,14 +29,3 @@ class Sforzando(pm.Output):
                     int(pm.get_device_info(id)[3] == 1):
                 foundId = id
         return foundId
-
-
-if __name__ == '__main__':
-    from time import sleep
-
-    output = Sforzando()
-    pm.init()
-    output.note_on(100, 100)
-    sleep(1)
-    output.note_off(100, 100)
-
